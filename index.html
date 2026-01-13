@@ -164,6 +164,19 @@
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzAaqP79kMX9Uq_QtIqnwMx8tp2v62k6H5lDOCtCZV2W73NwfWN9kFdMz0Myalx2vxRFw/exec";
         let currentKey = 'A', gauge, mainChart, dataInterval;
 
+        // Custom Formula: Estimate probability using Temperature and Humidity (Dew Point Spread)
+        function calculatePrecipChance(t, h) {
+            if (h < 50) return 5;
+            const a = 17.27, b = 237.7;
+            const gamma = ((a * t) / (b + t)) + Math.log(h / 100);
+            const dewPoint = (b * gamma) / (a - gamma);
+            const spread = t - dewPoint; 
+            
+            let chance = Math.max(0, 100 - (spread * 15)); 
+            if (h > 90) chance += 10;
+            return Math.min(99, Math.round(chance));
+        }
+
         function getLevelColor(type, val) {
             if (val === null || isNaN(val)) return '#9E9E9E';
             if (type === 'pm25') return val <= 15 ? '#00d2d3' : val <= 35 ? '#2ECC71' : val <= 54 ? '#FFD600' : '#FF1744';
@@ -204,6 +217,12 @@
                 const json = await res.json();
                 const d = json.feeds[0][Object.keys(json.feeds[0])[0]];
                 updateLassUI(d);
+                
+                // Update Precip Chance Display
+                const chance = calculatePrecipChance(d.s_t0, d.s_h0);
+                document.getElementById('precip-display').innerHTML = `${chance} <span class="val-unit">%</span>`;
+                document.getElementById('weather-icon').innerText = chance > 70 ? "🌧️" : chance > 40 ? "☁️" : "☀️";
+
                 document.getElementById('status-text').innerText = `${config[currentKey].name} 同步成功`;
             } catch (e) { document.getElementById('status-text').innerText = "連線異常"; }
         }

@@ -16,32 +16,32 @@
             --radius: 18px;
             --shadow: 0 4px 20px rgba(0,0,0,0.08);
             --clr-green: #2ECC71;
+            --clr-yellow: #FFD600;
+            --clr-orange: #FF9100;
             --clr-red: #FF1744;
+            --clr-cyan: #00d2d3;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg-color); height: 100vh; overflow: hidden; display: flex; flex-direction: column; color: var(--text-main); }
 
-        /* --- UI Components --- */
+        /* --- Header & Sidebar --- */
         .header { height: 65px; background: var(--header-bg); display: flex; align-items: center; padding: 0 25px; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 10; }
         .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; margin-right: 15px; }
-        
         #data-status { margin-left: auto; font-size: 0.8rem; padding: 6px 15px; border-radius: 50px; background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px; }
         .status-dot { width: 8px; height: 8px; background: var(--clr-green); border-radius: 50%; }
 
         .app-container { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 260px; background: var(--sidebar-color); color: white; padding: 25px; display: flex; flex-direction: column; gap: 20px; transition: transform 0.3s ease; }
-        
         .dropdown-container { position: relative; }
         .dropdown-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: white; color: #333; font-weight: 700; cursor: pointer; }
         .dropdown-list { position: absolute; top: 110%; left: 0; right: 0; background: #5a5555; border-radius: 12px; list-style: none; display: none; overflow: hidden; z-index: 100; }
         .dropdown-list.show { display: block; }
         .dropdown-list li { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; color: white; }
-
         .nav-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); padding: 12px 15px; border-radius: 12px; cursor: pointer; text-align: left; font-size: 0.95rem; }
         .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; padding-left: 20px; }
 
-        /* --- Main Layout --- */
+        /* --- Main Content Layout --- */
         .main-content { flex: 1; padding: 25px; overflow-y: auto; }
         .view-container { display: flex; flex-direction: column; gap: 20px; height: 100%; }
         .hidden { display: none !important; }
@@ -49,7 +49,6 @@
         .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         .row-top { flex: 2; display: flex; gap: 20px; }
         .row-bottom { flex: 1; display: flex; gap: 20px; }
-        
         .gauge-card { flex: 1.5; }
         .stack-column { flex: 1; display: flex; flex-direction: column; gap: 20px; }
         .info-group-wide { flex: 2; display: flex; flex-direction: row; }
@@ -62,24 +61,29 @@
         .label-small { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 5px; }
         .val-large { font-size: 3.2rem; font-weight: 800; line-height: 1; transition: color 0.3s ease; }
         .val-unit { font-size: 1.2rem; font-weight: 400; margin-left: 3px; color: var(--text-muted); }
-
         #aqi-notice { margin-top:10px; padding:5px 18px; border-radius:50px; font-size:0.85rem; color:white; font-weight:700; }
 
+        /* Clock */
         .sidebar-bottom { margin-top: auto; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 12px; }
         .analog-clock { width: 48px; height: 48px; border: 2px solid white; border-radius: 50%; position: relative; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: white; transform: translateX(-50%); }
         .hour-hand { width: 3px; height: 11px; } .min-hand { width: 2px; height: 16px; } .sec-hand { width: 1px; height: 18px; background: var(--clr-red); }
 
+        /* Modal & Standards */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 9999; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; padding: 35px; border-radius: var(--radius); width: 90%; max-width: 800px; position: relative; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--radius); width: 90%; max-width: 800px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .standards-container { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .standards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .standard-box { padding: 10px; border-radius: 10px; text-align: center; color: white; font-weight: 700; font-size: 0.85rem; }
 
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
-            .sidebar { position: fixed; left: 0; top: 65px; bottom: 0; transform: translateX(-100%); z-index: 5000;}
+            .sidebar { position: fixed; left: 0; top: 65px; bottom: 0; transform: translateX(-100%); z-index: 5000; }
             .sidebar.active { transform: translateX(0); }
-            .row-top, .row-bottom, .plant-grid { flex-direction: column; height: auto; display: flex;}
+            .row-top, .row-bottom, .plant-grid { flex-direction: column; height: auto; display: flex; }
             .card { min-height: 160px; }
+            .standards-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -152,7 +156,17 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="history-modal"><div class="modal-content"><button style="float:right; border:none; background:none; font-size:2rem; cursor:pointer;" onclick="closeModal()">&times;</button><h2 id="modal-title" style="margin-bottom:20px;">數據趨勢圖</h2><div style="height:380px; width:100%;"><canvas id="mainChart"></canvas></div></div></div>
+    <div class="modal-overlay" id="history-modal">
+        <div class="modal-content">
+            <button style="float:right; border:none; background:none; font-size:2rem; cursor:pointer;" onclick="closeModal()">&times;</button>
+            <h2 id="modal-title" style="margin-bottom:20px;">數據趨勢圖</h2>
+            <div style="height:300px; width:100%;"><canvas id="mainChart"></canvas></div>
+            <div class="standards-container">
+                <div class="label-small" style="font-size: 0.9rem;">指標參考標準</div>
+                <div class="standards-grid" id="standards-grid"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const config = {
@@ -162,19 +176,23 @@
             'E': { name: '植物觀測', type: 'gas' }
         };
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzAaqP79kMX9Uq_QtIqnwMx8tp2v62k6H5lDOCtCZV2W73NwfWN9kFdMz0Myalx2vxRFw/exec";
+        
+        const standardLevels = {
+            's_d0': [ {l:'優良', v:'0-15', c:'#00d2d3'}, {l:'普通', v:'16-35', c:'#2ECC71'}, {l:'敏感', v:'36-54', c:'#FFD600'}, {l:'不良', v:'55+', c:'#FF1744'} ],
+            's_t0': [ {l:'低溫', v:'<18', c:'#00d2d3'}, {l:'舒適', v:'18-28', c:'#2ECC71'}, {l:'悶熱', v:'28-32', c:'#FF9100'}, {l:'高溫', v:'32+', c:'#FF1744'} ],
+            's_h0': [ {l:'乾燥', v:'<30', c:'#FF9100'}, {l:'舒適', v:'30-70', c:'#2ECC71'}, {l:'潮濕', v:'70-85', c:'#FFD600'}, {l:'極潮濕', v:'85+', c:'#FF1744'} ],
+            's_g8': [ {l:'優良', v:'<1000', c:'#2ECC71'}, {l:'普通', v:'1K-2K', c:'#FFD600'}, {l:'不佳', v:'2K-5K', c:'#FF9100'}, {l:'危害', v:'5K+', c:'#FF1744'} ],
+            's_gg': [ {l:'優良', v:'<220', c:'#2ECC71'}, {l:'普通', v:'221-660', c:'#FFD600'}, {l:'不佳', v:'661-2K', c:'#FF9100'}, {l:'危害', v:'2K+', c:'#FF1744'} ]
+        };
+
         let currentKey = 'A', gauge, mainChart, dataInterval;
 
-        // Custom Formula: Estimate probability using Temperature and Humidity (Dew Point Spread)
         function calculatePrecipChance(t, h) {
             if (h < 50) return 5;
-            const a = 17.27, b = 237.7;
-            const gamma = ((a * t) / (b + t)) + Math.log(h / 100);
-            const dewPoint = (b * gamma) / (a - gamma);
-            const spread = t - dewPoint; 
-            
-            let chance = Math.max(0, 100 - (spread * 15)); 
-            if (h > 90) chance += 10;
-            return Math.min(99, Math.round(chance));
+            const gamma = ((17.27 * t) / (237.7 + t)) + Math.log(h / 100);
+            const dewPoint = (237.7 * gamma) / (17.27 - gamma);
+            let chance = Math.max(0, 100 - ((t - dewPoint) * 15));
+            return Math.min(99, Math.round(h > 90 ? chance + 10 : chance));
         }
 
         function getLevelColor(type, val) {
@@ -187,10 +205,7 @@
             return '#333';
         }
 
-        window.onload = () => {
-            initGauge(); initHistoryChart(); setupDropdown(); updateClock();
-            setInterval(updateClock, 1000); switchPage('A');
-        };
+        window.onload = () => { initGauge(); initHistoryChart(); setupDropdown(); updateClock(); setInterval(updateClock, 1000); switchPage('A'); };
 
         function setupDropdown() {
             const btn = document.getElementById('source-selector');
@@ -217,12 +232,9 @@
                 const json = await res.json();
                 const d = json.feeds[0][Object.keys(json.feeds[0])[0]];
                 updateLassUI(d);
-                
-                // Update Precip Chance Display
                 const chance = calculatePrecipChance(d.s_t0, d.s_h0);
                 document.getElementById('precip-display').innerHTML = `${chance} <span class="val-unit">%</span>`;
                 document.getElementById('weather-icon').innerText = chance > 70 ? "🌧️" : chance > 40 ? "☁️" : "☀️";
-
                 document.getElementById('status-text').innerText = `${config[currentKey].name} 同步成功`;
             } catch (e) { document.getElementById('status-text').innerText = "連線異常"; }
         }
@@ -237,13 +249,14 @@
                 document.getElementById('p-humi').innerText = h; document.getElementById('p-humi').style.color = getLevelColor('humi', h);
                 document.getElementById('p-soil').innerText = s;
                 document.getElementById('p-co2').innerText = c; document.getElementById('p-co2').style.color = getLevelColor('co2', c);
-                document.getElementById('status-text').innerText = "植物觀測更新成功";
+                document.getElementById('status-text').innerText = "植物觀測同步中";
             } catch (e) { console.error(e); }
         }
 
         function updateLassUI(d) {
             const pm = Math.round(d.s_d0), pmCol = getLevelColor('pm25', pm);
-            const pmEl = document.getElementById('pm25-val'); pmEl.innerText = pm; pmEl.style.color = pmCol;
+            document.getElementById('pm25-val').innerText = pm; 
+            document.getElementById('pm25-val').style.color = pmCol;
             const notice = document.getElementById('aqi-notice'); notice.style.backgroundColor = pmCol;
             notice.innerText = pm <= 15 ? "空氣清新" : pm <= 35 ? "普通品質" : "注意通風";
             gauge.data.datasets[0].data = [pm, Math.max(0, 100-pm)]; gauge.data.datasets[0].backgroundColor = [pmCol, '#eee']; gauge.update();
@@ -254,21 +267,41 @@
             });
         }
 
+        function navToModal(label, field) {
+            document.getElementById('history-modal').classList.add('active');
+            updateChart(label, field);
+            updateStandardsTable(field);
+        }
+
+        function updateStandardsTable(field) {
+            const container = document.getElementById('standards-grid');
+            container.innerHTML = '';
+            const levels = standardLevels[field];
+            if (!levels) return;
+            levels.forEach(lev => {
+                const box = document.createElement('div');
+                box.className = 'standard-box';
+                box.style.backgroundColor = lev.c;
+                box.innerHTML = `<div>${lev.l}</div><div style="font-size:0.7rem; opacity:0.9;">${lev.v}</div>`;
+                container.appendChild(box);
+            });
+        }
+
         async function updateChart(label, field) {
             try {
                 const res = await fetch(`https://pm25.lass-net.org/data/history.php?device_id=${config[currentKey].id}`);
                 const json = await res.json();
                 const history = json.feeds[0][Object.keys(json.feeds[0])[0]];
                 const cutoff = new Date().getTime() - (12 * 60 * 60 * 1000);
-                let points = [];
+                let pts = [];
                 history.forEach(f => {
                     const d = f[Object.keys(f)[0]]; const ts = new Date(d.timestamp).getTime();
-                    if (ts >= cutoff && d[field] !== undefined) points.push({ x: ts, y: parseFloat(d[field]) });
+                    if (ts >= cutoff && d[field] !== undefined) pts.push({ x: ts, y: parseFloat(d[field]) });
                 });
-                points.sort((a,b) => a.x - b.x);
-                mainChart.data.labels = points.map(p => { const t = new Date(p.x); return `${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`; });
+                pts.sort((a,b) => a.x - b.x);
+                mainChart.data.labels = pts.map(p => { const t = new Date(p.x); return `${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`; });
                 mainChart.data.datasets[0].label = `${config[currentKey].name} - ${label}`;
-                mainChart.data.datasets[0].data = points.map(p => p.y);
+                mainChart.data.datasets[0].data = pts.map(p => p.y);
                 mainChart.update();
             } catch (e) { console.error(e); }
         }
@@ -285,7 +318,6 @@
             document.getElementById('time-display').textContent = now.toLocaleTimeString('zh-TW', {hour12: false});
             document.getElementById('date-display').textContent = now.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' });
         }
-        function navToModal(l, f) { document.getElementById('history-modal').classList.add('active'); updateChart(l, f); }
         function closeModal() { document.getElementById('history-modal').classList.remove('active'); }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
     </script>
